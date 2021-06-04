@@ -9,8 +9,7 @@
 # (transcoding), templating and a way to reuse arguments that are frequently repeated. See more here:
 # https://kedro.readthedocs.io/en/stable/05_data/01_data_catalog.html
 #
-# This is a data set used by the iris classification example pipeline provided with this starter
-# template. Please feel free to remove it once you remove the example pipeline.
+
 input_data:
   type: spark.SparkDataSet
   filepath: gs://ds-data-public/survey/2020/survey_results_public.csv

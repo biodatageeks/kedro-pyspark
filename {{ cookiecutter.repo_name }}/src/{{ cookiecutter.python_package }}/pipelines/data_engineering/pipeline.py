@@ -39,7 +39,7 @@ def create_pipeline(**kwargs):
         [        
             node(
                 split_data,
-                inputs=["transformed_data", "params:example_test_data_ratio"],
+                inputs=["input_data", "params:example_test_data_ratio"],
                 outputs=["training_data", "testing_data"],
             )
         ]
