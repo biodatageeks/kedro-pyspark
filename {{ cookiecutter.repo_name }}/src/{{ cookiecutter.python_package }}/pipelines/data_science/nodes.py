@@ -44,4 +44,5 @@ def report_count(data: DataFrame) -> None:
     """Node for reporting the count of dataset
     """
     log = logging.getLogger(__name__)
-    log.info("Training data count: ", data.count())
+    count = data.count()
+    log.info(f"Training data count: {count}" )
