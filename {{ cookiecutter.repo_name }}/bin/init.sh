@@ -23,7 +23,10 @@ repo_name: $PROJECT_NAME
 python_package: ${PROJECT_NAME//-/_}
 EOF
 
-kedro new --starter https://github.com/biodatageeks/kedro-pyspark --checkout master --config $CONFIG_FILE
+if [ "$1" != "" ]; then TAG=$1; else TAG="master"; fi
+
+echo "Using starter using tag: $TAG"
+kedro new --verbose --starter https://github.com/biodatageeks/kedro-pyspark --checkout $TAG --config $CONFIG_FILE
 rm $CONFIG_FILE
 cd $HOME/work/git/$PROJECT_NAME
 kedro install
@@ -32,7 +35,7 @@ sed -i 's/mlflow_tracking_uri: mlruns/mlflow_tracking_uri: http:\/\/localhost:50
 cp conf/local/mlflow.yml conf/local-spark/
 conda deactivate
 
-KERNEL_NAME=ds-venv
+KERNEL_NAME=ds-kedro
 KERNEL_FILE=$HOME/.local/share/jupyter/kernels/$KERNEL_NAME/kernel.json
 if [ ! -f $KERNEL_FILE ] 
 then
