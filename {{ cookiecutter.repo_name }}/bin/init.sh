@@ -23,17 +23,22 @@ repo_name: $PROJECT_NAME
 python_package: ${PROJECT_NAME//-/_}
 EOF
 
-if [ "$1" != "" ]; then TAG=$1; else TAG="master"; fi
-
-echo "Using starter using tag: $TAG"
-kedro new --verbose --starter https://github.com/biodatageeks/kedro-pyspark --checkout $TAG --config $CONFIG_FILE
-rm $CONFIG_FILE
-cd $HOME/work/git/$PROJECT_NAME
-kedro install
-kedro mlflow init
-sed -i 's/mlflow_tracking_uri: mlruns/mlflow_tracking_uri: http:\/\/localhost:5000/g' conf/local/mlflow.yml
-cp conf/local/mlflow.yml conf/local-spark/
-conda deactivate
+PROJECT_DIR=$HOME/work/git/$PROJECT_NAME
+if [ ! -d $PROJECT_DIR ] 
+then
+        TAG=${1:-"master"}
+        echo "Using starter using tag: $TAG"
+        kedro new --verbose --starter https://github.com/biodatageeks/kedro-pyspark --checkout $TAG --config $CONFIG_FILE
+        rm $CONFIG_FILE
+        cd $PROJECT_DIR
+        kedro install
+        kedro mlflow init
+        sed -i 's/mlflow_tracking_uri: mlruns/mlflow_tracking_uri: http:\/\/localhost:5000/g' conf/local/mlflow.yml
+        cp conf/local/mlflow.yml conf/local-spark/
+        conda deactivate
+else
+        echo "Directory with project exists: $PROJECT_DIR"
+fi
 
 KERNEL_NAME=ds-kedro
 KERNEL_FILE=$HOME/.local/share/jupyter/kernels/$KERNEL_NAME/kernel.json
@@ -62,4 +67,5 @@ then
 else
         echo "Jupyter kernel already exists: $KERNEL_FILE"
 fi
+
 conda activate $VENV_DIR
